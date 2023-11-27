@@ -121,7 +121,7 @@ def main():
 
             # Generate a query for GPT-based internet search
             gpt_search_query = "strong buy ETF fund stocks Nasdaq MarketWatch"
-            role_instruction = "Role: Searching Nasdaq and MarketWatch on the internet for stock symbols of strong buy ETF funds or stocks\n"
+            role_instruction = "Role: stock buyer of strong buy ETF funds or stocks\n"
 
             print("Searching the internet for successful ETF funds or stocks to purchase with the GPT Artificial Intelligence robot.....")
 
