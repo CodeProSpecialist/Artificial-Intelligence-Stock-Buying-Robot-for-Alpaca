@@ -26,9 +26,9 @@ def analyze_sentiment(text):
     return result[0]['label']
 
 # Function to generate GPT-based internet searches
-def generate_internet_search(query):
+def generate_internet_search(query, role_instruction):
     gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neo-1.3B')
-    search_result = gpt_search_generator(query, max_length=150, num_return_sequences=1, temperature=0.7)
+    search_result = gpt_search_generator(role_instruction + "\n" + query, max_length=150, num_return_sequences=1, temperature=0.7)
     return search_result[0]['generated_text']
 
 # Function to get the price percentage change over the past two days
@@ -104,13 +104,20 @@ def main():
             end_date = datetime.now().strftime('%Y-%m-%d')
             budget_per_stock = 275  # $275 budget per stock
 
-            print("GPT Artificial Intelligence internet search for stocks is running.....")
-            
             # Generate a query for GPT-based internet search
-            gpt_search_query = "strong buy ETF fund stocks US MarketWatch"
+            gpt_search_query = "strong buy ETF fund stocks USA MarketWatch"
+            role_instruction = "Role: Stock Market Analyst\n"
 
             # Get the generated search result
-            gpt_search_result = generate_internet_search(gpt_search_query)
+            gpt_search_result = generate_internet_search(gpt_search_query, role_instruction)
+            
+            # Extract and print all stock symbols
+            print("List of Stock Symbols Extracted:")
+            symbols_from_gpt = extract_symbols_from_gpt_result(gpt_search_result)
+            print(', '.join(symbols_from_gpt))
+            print("\n")
+
+            # Print the GPT-generated search result
             print(f"Results from GPT internet search:\n{gpt_search_result}\n")
 
             # Process the search result to extract relevant stock symbols and filter by price change
