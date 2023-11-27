@@ -1,6 +1,7 @@
 import os
 from transformers import pipeline
 import alpaca_trade_api as tradeapi
+import re
 import yfinance as yf
 from datetime import datetime, timedelta, time as dt_time
 import pytz
@@ -72,17 +73,23 @@ def filter_symbols_by_price_change(search_result, percentage_threshold=0.35):
     return symbols_with_increase
 
 
-# Function to extract symbols from GPT search result
+# Function to extract symbols from GPT search result using regex
 def extract_symbols_from_gpt_result(search_result):
+    # Define a regex pattern for extracting stock symbols
+    symbol_pattern = re.compile(r'\b[A-Z]{1,5}\b')  # Adjust as needed
+
     result_lines = search_result.split('\n')
     relevant_symbols = []
 
     for line in result_lines:
-        if 'Symbol' in line:
-            symbol = line.split('Symbol:')[1].split(',')[0].strip()
-            relevant_symbols.append(symbol)
+        # Find all matches in the line using the symbol_pattern
+        symbols_in_line = symbol_pattern.findall(line)
+
+        # Add unique symbols to the list
+        relevant_symbols.extend(set(symbols_in_line))
 
     return relevant_symbols
+
 
 
 # Function to check if there's enough cash in the Alpaca account
