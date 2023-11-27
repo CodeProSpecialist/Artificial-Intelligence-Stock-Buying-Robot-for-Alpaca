@@ -154,7 +154,7 @@ def main():
             print("Searching the internet for successful ETF funds or stocks to purchase with the GPT Artificial Intelligence robot.....")
 
             # Get the generated search result
-            gpt_search_result = generate_internet_search(gpt_search_query, role_instruction)
+            gpt_search_result = generate_internet_search(gpt_search_query)
 
             # Extract and print all valid stock symbols
             print("List of Valid Stock Symbols:")
