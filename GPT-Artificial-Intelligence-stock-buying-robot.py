@@ -31,12 +31,17 @@ def analyze_sentiment(text):
 
 # Function to generate GPT-based internet searches
 def generate_internet_search(query, role_instruction):
+    # Include site-specific queries and exclude certain non-stock symbols
+    site_query = ' site:nasdaq.com OR site:marketwatch.com -ETF -P -S -DOW'
+
     gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neo-1.3B')
-    print("Searching the internet for stock symbols.....\n")
+    print("Searching the internet for stock symbols...\n")
+
+    # Append the site-specific query to the main query
+    full_query = role_instruction + "\n" + query + site_query
 
     # Set max_length back to the previous value
-    search_result = gpt_search_generator(role_instruction + "\n" + query, max_length=150, num_return_sequences=1,
-                                         temperature=0.7)
+    search_result = gpt_search_generator(full_query, max_length=150, num_return_sequences=1, temperature=0.7)
 
     return search_result[0]['generated_text']
 
