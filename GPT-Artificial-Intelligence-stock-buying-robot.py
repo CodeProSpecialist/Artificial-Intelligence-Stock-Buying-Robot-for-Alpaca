@@ -28,6 +28,7 @@ def analyze_sentiment(text):
 # Function to generate GPT-based internet searches
 def generate_internet_search(query, role_instruction):
     gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neo-1.3B')
+    print("Searching the internet for stock symbols...\n")
     search_result = gpt_search_generator(role_instruction + "\n" + query, max_length=150, num_return_sequences=1, temperature=0.7)
     return search_result[0]['generated_text']
 
@@ -106,7 +107,7 @@ def main():
 
             # Generate a query for GPT-based internet search
             gpt_search_query = "strong buy ETF fund stocks USA MarketWatch"
-            role_instruction = "Role: Stock Market Analyst\n"
+            role_instruction = "Role: Searching the internet for strong buy ETF funds or stocks\n" 
 
             # Get the generated search result
             gpt_search_result = generate_internet_search(gpt_search_query, role_instruction)
