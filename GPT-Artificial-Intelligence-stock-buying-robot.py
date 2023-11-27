@@ -105,7 +105,7 @@ def main():
             budget_per_stock = 275  # $275 budget per stock
 
             # Generate a query for GPT-based internet search
-            gpt_search_query = "strong buy ETF fund stocks USA MarketWatch Zacks rally increasing"
+            gpt_search_query = "strong buy ETF fund stocks USA MarketWatch rally increasing"
 
             # Get the generated search result
             gpt_search_result = generate_internet_search(gpt_search_query)
