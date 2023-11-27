@@ -36,7 +36,7 @@ def generate_internet_search(query, role_instruction):
     print("Searching the internet for stock symbols...\n")
 
     # Append the site-specific query to the main query
-    full_query = role_instruction + "\n" + query + site_query
+    full_query = query + site_query
 
     # Set max_length back to the previous value
     search_result = gpt_search_generator(full_query, max_length=150, num_return_sequences=1, temperature=0.7)
