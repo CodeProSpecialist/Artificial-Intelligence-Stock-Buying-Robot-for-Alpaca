@@ -38,18 +38,27 @@ def generate_internet_search(query, role_instruction):
 
 
 # Function to get the price percentage change over the past two days
+# Function to get the price change percentage from today's opening price
 def get_price_change_percentage(symbol):
     stock_info = yf.Ticker(symbol)
-    historical_data = stock_info.history(period='2d')['Close']
+
+    # Get today's date in the format 'YYYY-MM-DD'
+    today_date = datetime.now().strftime('%Y-%m-%d')
+
+    # Get today's opening price
+    today_opening_price = stock_info.history(start=today_date, end=today_date)['Open'].iloc[0]
+
+    # Get the current price
+    current_price = stock_info.history(period='1d')['Close'].iloc[-1]
 
     # Calculate percentage change
-    price_change_percentage = (historical_data.iloc[-1] - historical_data.iloc[0]) / historical_data.iloc[0] * 100
+    price_change_percentage = ((current_price - today_opening_price) / today_opening_price) * 100
 
     return price_change_percentage
 
 
 # Function to process GPT-generated search results, extract symbols, and filter by price change
-def filter_symbols_by_price_change(search_result, percentage_threshold=1.0):
+def filter_symbols_by_price_change(search_result, percentage_threshold=0.35):
     # Extract symbols from GPT result
     relevant_symbols = extract_symbols_from_gpt_result(search_result)
 
