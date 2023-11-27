@@ -108,14 +108,14 @@ def main():
     while True:
         try:
 
-            if 1 == 1:
+
                 # Check if the market is open during Eastern Time
                 # comment out the if statement below to run the program outside of market hours
                 #if not is_market_open():
                 #    print(
                 #        "This stock trading robot only works during stock market hours. Waiting for the stock market to open for trading….")
                 #    time.sleep(60)
-                    continue
+                #    continue
 
             # Define trading parameters
             start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
