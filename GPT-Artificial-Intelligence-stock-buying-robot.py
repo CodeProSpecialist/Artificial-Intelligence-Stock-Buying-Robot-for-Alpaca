@@ -30,10 +30,13 @@ def analyze_sentiment(text):
 
 # Function to generate GPT-based internet searches
 def generate_internet_search(query, role_instruction):
-    gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neox-20b')
-    print("Searching the internet for stock symbols.....\n")
-    search_result = gpt_search_generator(role_instruction + "\n" + query, max_length=150, num_return_sequences=1,
+    gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neox-20B')
+    print("Searching the internet for stock symbols...\n")
+
+    # Increase max_length to accommodate larger model
+    search_result = gpt_search_generator(role_instruction + "\n" + query, max_length=300, num_return_sequences=1,
                                          temperature=0.7)
+
     return search_result[0]['generated_text']
 
 
