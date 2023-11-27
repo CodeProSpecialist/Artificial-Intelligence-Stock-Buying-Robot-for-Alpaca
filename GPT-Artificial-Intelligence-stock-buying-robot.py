@@ -117,7 +117,7 @@ def main():
             # Define trading parameters
             start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
             end_date = datetime.now().strftime('%Y-%m-%d')
-            budget_per_stock = 275  # $275 budget per stock
+            budget_per_stock = 275   # $275 budget per stock
 
             # Generate a query for GPT-based internet search
             gpt_search_query = "strong buy ETF fund stocks USA MarketWatch"
