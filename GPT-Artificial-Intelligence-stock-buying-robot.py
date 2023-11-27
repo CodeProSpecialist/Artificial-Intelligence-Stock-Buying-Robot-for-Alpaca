@@ -104,8 +104,10 @@ def main():
             end_date = datetime.now().strftime('%Y-%m-%d')
             budget_per_stock = 275  # $275 budget per stock
 
+            print("GPT Artificial Intelligence internet search for stocks is running.....")
+            
             # Generate a query for GPT-based internet search
-            gpt_search_query = "strong buy ETF fund stocks USA MarketWatch rally increasing"
+            gpt_search_query = "strong buy ETF fund stocks US MarketWatch"
 
             # Get the generated search result
             gpt_search_result = generate_internet_search(gpt_search_query)
