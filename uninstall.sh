@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Uninstall Python packages
-pip3 uninstall -y alpaca-trade-api yfinance transformers
+sudo pip3 uninstall -y alpaca-trade-api yfinance transformers torch 
 
 # Remove system packages
 sudo apt-get remove -y libopenblas-dev
