@@ -31,8 +31,8 @@ def analyze_sentiment(text):
 # Function to generate GPT-based internet searches
 def generate_internet_search(query, role_instruction):
     gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neo-1.3B')
-    print("Searching the internet for stock symbols...\n")
-    search_result = gpt_search_generator(role_instruction + "\n" + query, max_length=150, num_return_sequences=1,
+    print("Searching the internet for stock symbols.....\n")
+    search_result = gpt_search_generator(role_instruction + "\n" + query, max_length=800, num_return_sequences=5,
                                          temperature=0.7)
     return search_result[0]['generated_text']
 
@@ -107,12 +107,15 @@ def is_market_open():
 def main():
     while True:
         try:
-            # Check if the market is open during Eastern Time
-            if not is_market_open():
-                print(
-                    "This stock trading robot only works during stock market hours. Waiting for the stock market to open for trading….")
-                time.sleep(60)
-                continue
+
+            if 1 == 1:
+                # Check if the market is open during Eastern Time
+                # comment out the if statement below to run the program outside of market hours
+                #if not is_market_open():
+                #    print(
+                #        "This stock trading robot only works during stock market hours. Waiting for the stock market to open for trading….")
+                #    time.sleep(60)
+                    continue
 
             # Define trading parameters
             start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
