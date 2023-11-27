@@ -80,21 +80,20 @@ def filter_symbols_by_price_change(search_result, percentage_threshold=0.35):
 
 # Function to extract symbols from GPT search result using regex
 def extract_symbols_from_gpt_result(search_result):
-    # Define a regex pattern for extracting stock symbols
-    symbol_pattern = re.compile(r'\b[A-Z]{1,5}\b')  # Adjust as needed
+    # Define a more specific regex pattern for extracting stock symbols
+    symbol_pattern = re.compile(r'\b[A-Z]+\b')  # Adjust as needed
 
     result_lines = search_result.split('\n')
-    relevant_symbols = []
+    relevant_symbols = set()
 
     for line in result_lines:
         # Find all matches in the line using the symbol_pattern
         symbols_in_line = symbol_pattern.findall(line)
 
-        # Add unique symbols to the list
-        relevant_symbols.extend(set(symbols_in_line))
+        # Add unique symbols to the set
+        relevant_symbols.update(symbols_in_line)
 
-    return relevant_symbols
-
+    return list(relevant_symbols)
 
 
 # Function to check if there's enough cash in the Alpaca account
