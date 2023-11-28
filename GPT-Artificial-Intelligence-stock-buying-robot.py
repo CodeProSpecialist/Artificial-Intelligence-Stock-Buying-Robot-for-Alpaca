@@ -70,7 +70,7 @@ def generate_internet_search_with_symbols(query, stock_symbols):
     sentiment_result = ', '.join(sentiments)
 
     gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neo-1.3B')
-    search_result = gpt_search_generator(full_query, max_length=160, num_return_sequences=1, temperature=0.7)
+    search_result = gpt_search_generator(full_query, max_length=175, num_return_sequences=8, temperature=0.7)
 
     return f"{sentiment_result}\n{search_result[0]['generated_text']}"
 
