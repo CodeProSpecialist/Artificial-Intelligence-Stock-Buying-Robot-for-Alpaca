@@ -1,7 +1,7 @@
 # Artificial-Intelligence-Stock-Buying-Robot-for-Alpaca
 This is an Artificial Intelligence Stock buying robot for Alpaca that only purchases stocks. It does not currently sell stocks. 
 
-***** Proceed with caution because this python code is so new that it might have errors. It is still in the beta version. Today is 11-27-2023. *****
+***** Proceed with caution because this python code is so new that it might have errors. The code is so new that it is still being experimented with and is not 100% fully operational. It is still in the beta version. Today is 11-27-2023. *****
 
 You need at least 16GB of RAM memory to run this GPT AI Robot. Some of the RAM can be virtual memory. 
 
