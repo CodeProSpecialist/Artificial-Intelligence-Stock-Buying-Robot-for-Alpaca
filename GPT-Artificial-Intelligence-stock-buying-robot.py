@@ -69,8 +69,25 @@ def generate_internet_search_with_symbols(query, stock_symbols):
     # Combine sentiment analysis results
     sentiment_result = ', '.join(sentiments)
 
+    max_sentences = 5
+    max_tokens_per_sentence = 15  # Assuming an average of 15 tokens per sentence
+    # Assuming an average of 15 tokens per sentence
+    average_tokens_per_sentence = 15
+
+    # Desired number of sentences per stock symbol
+    desired_sentences_per_symbol = 10
+
+    # Calculate the total maximum tokens
+    max_total_tokens_per_symbol = average_tokens_per_sentence * desired_sentences_per_symbol
+
+    # Calculate the total maximum tokens
+    max_total_tokens = max_sentences * max_tokens_per_sentence
+
     gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neo-1.3B')
-    search_result = gpt_search_generator(full_query, max_length=175, num_return_sequences=8, temperature=0.7)
+    search_result = gpt_search_generator(full_query,
+    max_length=max_total_tokens_per_symbol,
+    num_return_sequences=1,
+    temperature=0.7)
 
     return f"{sentiment_result}\n{search_result[0]['generated_text']}"
 
