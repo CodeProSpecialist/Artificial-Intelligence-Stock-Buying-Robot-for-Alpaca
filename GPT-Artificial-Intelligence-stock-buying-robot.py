@@ -150,22 +150,9 @@ def main():
                 print(', '.join(stock_symbols))
                 print("\n")
 
-                # Modify the GPT search query
-                gpt_search_query_nasdaq = f"Nasdaq strong buy stocks 2023"
-                gpt_search_query_marketwatch = f"Market Watch strong buy stocks 2023"
-
-                # Modify the GPT search query for Nasdaq
-                gpt_search_query_nasdaq = "Nasdaq strong buy"
-                gpt_search_result_nasdaq = generate_internet_search_with_symbols(gpt_search_query_nasdaq, stock_symbols)
-                print(f"Results from Nasdaq search:\n{gpt_search_result_nasdaq}\n")
-
-                # Modify the GPT search query for Market Watch ETFs
-                gpt_search_query_marketwatch_etf = "MarketWatch strong buy ETFs"
-                gpt_search_result_marketwatch_etf = generate_internet_search_with_symbols(gpt_search_query_marketwatch_etf, stock_symbols)
-                print(f"Results from MarketWatch ETF search:\n{gpt_search_result_marketwatch_etf}\n")
 
                 # Generate a query for GPT-based internet search using stock symbols
-                gpt_search_query = f"Market Watch etf buy strong {' '.join(stock_symbols)} 2023"
+                gpt_search_query = f"Nasdaq strong buy {' '.join(stock_symbols)} buy now"
                 print("Searching the internet for the latest news on the specified stocks with the GPT Artificial Intelligence robot.....")
                 print("")
 
