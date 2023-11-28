@@ -129,7 +129,6 @@ def is_market_open():
 def main():
     while True:
         try:
-
             # Get stock symbols from the MarketWatch website
             url_marketwatch = 'https://www.marketwatch.com/tools/top-25-etfs'
             stock_symbols = get_stock_symbols_marketwatch(url_marketwatch)
