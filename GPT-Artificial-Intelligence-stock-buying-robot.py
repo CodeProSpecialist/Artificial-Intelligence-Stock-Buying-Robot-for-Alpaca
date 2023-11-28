@@ -170,7 +170,7 @@ def main():
                 print("")
 
                 # Get the generated search result
-                gpt_search_result = generate_internet_search_with_symbols(gpt_search_query)
+                gpt_search_result = generate_internet_search_with_symbols(gpt_search_query, stock_symbols)
 
                 # Print the GPT-generated search result
                 print(f"Results from GPT internet search:\n{gpt_search_result}\n")
