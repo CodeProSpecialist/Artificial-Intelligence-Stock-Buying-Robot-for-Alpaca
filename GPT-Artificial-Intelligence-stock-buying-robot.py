@@ -134,7 +134,7 @@ def main():
                 stock_symbols = [symbol.strip() for symbol in file.readlines()]
 
             if stock_symbols:
-                print("List of Valid Stock Symbols from MarketWatch:")
+                print("List of Valid Stock Symbols: ")
                 print(', '.join(stock_symbols))
                 print("\n")
 
