@@ -124,14 +124,16 @@ def main():
     while True:
         try:
             # Check if the market is open during Eastern Time
-            if not is_market_open():
-                print("This stock trading robot only works during stock market hours. Waiting for the stock market to open for trading….")
-                time.sleep(60)
-                continue
+            #if not is_market_open():
+            #    print("This stock trading robot only works during stock market hours. Waiting for the stock market to open for trading….")
+            #    time.sleep(60)
+            #    continue
 
             # Get stock symbols from the MarketWatch website
             url_marketwatch = 'https://www.marketwatch.com/tools/top-25-etfs'
             stock_symbols = get_stock_symbols_marketwatch(url_marketwatch)
+
+            budget_per_stock = 275
 
             if stock_symbols:
                 print("List of Valid Stock Symbols from MarketWatch:")
