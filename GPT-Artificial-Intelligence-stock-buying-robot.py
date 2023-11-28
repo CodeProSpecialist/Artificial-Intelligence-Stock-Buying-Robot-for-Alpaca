@@ -7,6 +7,8 @@ import alpaca_trade_api as tradeapi
 from pytz import timezone
 from datetime import time as dt_time
 import time
+import requests
+from bs4 import BeautifulSoup
 
 # Load environment variables for Alpaca API
 APIKEYID = os.getenv('APCA_API_KEY_ID')
@@ -27,6 +29,17 @@ def analyze_sentiment(text):
     result = sentiment_analyzer(text)
     return result[0]['label']
 
+# Function to get stock symbols from a website
+def get_stock_symbols(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        symbol_elements = soup.select('.symbol-link')
+        symbols = [symbol.text for symbol in symbol_elements]
+        return symbols
+    else:
+        print(f"Failed to retrieve data. Status code: {response.status_code}")
+        return None
 
 # Function to generate GPT-based internet searches
 def generate_internet_search(query):
@@ -34,32 +47,21 @@ def generate_internet_search(query):
     search_result = gpt_search_generator(query, max_length=150, num_return_sequences=1, temperature=0.7)
     return search_result[0]['generated_text']
 
-
 # Function to get the price percentage change over the past two days
-# Function to get the price change percentage from today's opening price
 def get_price_change_percentage(symbol):
     stock_info = yf.Ticker(symbol)
 
-    # Get today's date in the format 'YYYY-MM-DD'
     today_date = datetime.now().strftime('%Y-%m-%d')
-
-    # Get today's opening price
     today_opening_price = stock_info.history(start=today_date, end=today_date)['Open'].iloc[0]
-
-    # Get the current price
     current_price = stock_info.history(period='1d')['Close'].iloc[-1]
-
-    # Calculate percentage change
     price_change_percentage = ((current_price - today_opening_price) / today_opening_price) * 100
 
     return price_change_percentage
 
 # Function to process GPT-generated search results, extract symbols, and filter by price change
 def filter_symbols_by_price_change(search_result, percentage_threshold=0.35):
-    # Extract symbols from GPT result
     relevant_symbols = extract_and_validate_symbols_from_gpt_result(search_result)
 
-    # Filter symbols by price change percentage
     symbols_with_increase = [symbol for symbol in relevant_symbols if
                              get_price_change_percentage(symbol) >= percentage_threshold]
 
@@ -67,17 +69,13 @@ def filter_symbols_by_price_change(search_result, percentage_threshold=0.35):
 
 # Function to extract symbols from GPT search result using regex and validate them
 def extract_and_validate_symbols_from_gpt_result(search_result):
-    # Define a more specific regex pattern for extracting stock symbols
-    symbol_pattern = re.compile(r'\b[A-Z]+\b')  # Adjust as needed
-
+    symbol_pattern = re.compile(r'\b[A-Z]+\b')
     result_lines = search_result.split('\n')
     extracted_symbols = set()
 
     for line in result_lines:
-        # Find all matches in the line using the symbol_pattern
         symbols_in_line = symbol_pattern.findall(line)
 
-        # Validate each symbol and add valid ones to the set
         for symbol in symbols_in_line:
             if is_valid_stock_symbol(symbol):
                 extracted_symbols.add(symbol)
@@ -87,7 +85,6 @@ def extract_and_validate_symbols_from_gpt_result(search_result):
 def is_valid_stock_symbol(symbol):
     try:
         stock_info = yf.Ticker(symbol)
-        # Fetch some information to verify if the symbol is valid
         info = stock_info.info
         if info:
             return True
@@ -126,57 +123,48 @@ def is_market_open():
 def main():
     while True:
         try:
-            # Check if the market is open during Eastern Time
-            # comment out the if statement below to run the program outside of market hours
-            #if not is_market_open():
-            #    print(
-            #        "This stock trading robot only works during stock market hours. Waiting for the stock market to open for trading….")
-            #    time.sleep(60)
-            #    continue
+            # Get stock symbols from the website
+            url = 'https://www.nasdaq.com/market-activity/etf'
+            stock_symbols = get_stock_symbols(url)
 
-            # Define trading parameters
-            start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
-            end_date = datetime.now().strftime('%Y-%m-%d')
-            budget_per_stock = 275   # $275 budget per stock
+            if stock_symbols:
+                print("List of Valid Stock Symbols:")
+                print(', '.join(stock_symbols))
+                print("\n")
 
-            print("")
-            # Generate a query for GPT-based internet search
-            gpt_search_query = "ETF fund stock strong buy recommended"
-            print("")
-            #role_instruction = "Role: stock buyer of strong buy ETF funds or stocks\n"
+                # Generate a query for GPT-based internet search using stock symbols
+                gpt_search_query = f"Latest news on {' '.join(stock_symbols)} stocks"
+                print("Searching the internet for the latest news on the specified stocks with the GPT Artificial Intelligence robot.....")
+                print("")
 
-            print("Searching the internet for successful ETF funds or stocks to purchase with the GPT Artificial Intelligence robot.....")
-            print("")
+                # Get the generated search result
+                gpt_search_result = generate_internet_search(gpt_search_query)
 
-            # Get the generated search result
-            gpt_search_result = generate_internet_search(gpt_search_query)
+                # Print the GPT-generated search result
+                print(f"Results from GPT internet search:\n{gpt_search_result}\n")
 
-            # Extract and print all valid stock symbols
-            print("List of Valid Stock Symbols:")
-            valid_symbols_from_gpt = extract_and_validate_symbols_from_gpt_result(gpt_search_result)
-            print(', '.join(valid_symbols_from_gpt))
-            print("\n")
+                # Analyze sentiment and decide to buy stocks with positive sentiment
+                sentiment = analyze_sentiment(gpt_search_result)
+                if sentiment == 'POSITIVE':
+                    print("Market sentiment is positive. Considering buying stocks...")
 
-            # Print the GPT-generated search result
-            print(f"Results from GPT internet search:\n{gpt_search_result}\n")
+                    # Buy stocks for each valid symbol
+                    for symbol in stock_symbols:
+                        if has_enough_cash(budget_per_stock) and is_price_within_budget(symbol, budget_per_stock):
+                            print(f"Placing market order for {symbol}...")
+                            api.submit_order(
+                                symbol=symbol,
+                                qty=1,
+                                side='buy',
+                                type='market',
+                                time_in_force='day',
+                            )
+                            print(f"Market order for {symbol} placed successfully.")
+                        else:
+                            print(f"Not enough cash or price not within budget for {symbol}. Skipping...")
 
-            # Process the search result to extract relevant stock symbols and filter by price change
-            symbols_with_increase = filter_symbols_by_price_change(gpt_search_result)
-
-            # Print the list of symbols with current price and percentage of price change for today
-            print("\nList of Symbols with Increase:")
-            for symbol in symbols_with_increase:
-                current_price = get_current_price(symbol)
-                price_change_percentage = get_price_change_percentage(symbol)
-                print(
-                    f"Symbol: {symbol}, Current Price: {current_price:.2f}, Percentage Change: {price_change_percentage:.2f}%")
-
-                # Buy stocks for valid symbols within budget
-                if has_enough_cash(budget_per_stock) and is_price_within_budget(symbol, budget_per_stock):
-                    # Your logic for buying stocks goes here
-                    print(f"Buying {symbol}...")
                 else:
-                    print(f"Not enough cash or price not within budget for {symbol}. Skipping...")
+                    print("Market sentiment is not positive. Skipping stock purchase.")
 
             time.sleep(60)  # Sleep for 60 seconds before the next iteration
 
