@@ -129,9 +129,9 @@ def is_market_open():
 def main():
     while True:
         try:
-            # Get stock symbols from the MarketWatch website
-            url_marketwatch = 'https://www.marketwatch.com/tools/top-25-etfs'
-            stock_symbols = get_stock_symbols_marketwatch(url_marketwatch)
+            # Read stock symbols from a local text file
+            with open('list-of-stock-symbols-to-scan.txt', 'r') as file:
+                stock_symbols = [symbol.strip() for symbol in file.readlines()]
 
             if stock_symbols:
                 print("List of Valid Stock Symbols from MarketWatch:")
