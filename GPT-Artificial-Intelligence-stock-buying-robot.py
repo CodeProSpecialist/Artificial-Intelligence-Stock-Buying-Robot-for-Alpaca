@@ -51,7 +51,7 @@ def get_stock_symbols_marketwatch(url):
 # Function to generate GPT-based internet searches
 def generate_internet_search(query):
     gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neo-1.3B')
-    search_result = gpt_search_generator(query, max_length=200, num_return_sequences=1, temperature=0.7)
+    search_result = gpt_search_generator(query, max_length=160, num_return_sequences=1, temperature=0.7)
     return search_result[0]['generated_text']
 
 # Function to get the price percentage change over the past two days
@@ -149,7 +149,7 @@ def main():
                 print("\n")
 
                 # Generate a query for GPT-based internet search using stock symbols
-                gpt_search_query = f"Latest news on {' '.join(stock_symbols)} stocks"
+                gpt_search_query = f"stocks etf percentage change today {' '.join(stock_symbols)} 2023"
                 print("Searching the internet for the latest news on the specified stocks with the GPT Artificial Intelligence robot.....")
                 print("")
 
@@ -162,12 +162,12 @@ def main():
                 # Analyze sentiment and decide to buy stocks with positive sentiment
                 sentiment = analyze_sentiment(gpt_search_result)
                 if sentiment == 'POSITIVE':
-                    print("Market sentiment is positive. Considering buying stocks...")
+                    print("Market sentiment is positive. Considering buying stocks.....")
 
                     # Buy stocks for each valid symbol
                     for symbol in stock_symbols:
                         if has_enough_cash(budget_per_stock) and is_price_within_budget(symbol, budget_per_stock):
-                            print(f"Placing market order for {symbol}...")
+                            print(f"Placing market order for {symbol}.....")
                             api.submit_order(
                                 symbol=symbol,
                                 qty=1,
@@ -177,7 +177,7 @@ def main():
                             )
                             print(f"Market order for {symbol} placed successfully.")
                         else:
-                            print(f"Not enough cash or price not within budget for {symbol}. Skipping...")
+                            print(f"Not enough cash or price not within budget for {symbol}. Skipping.....")
 
                 else:
                     print("Market sentiment is not positive. Skipping stock purchase.")
