@@ -149,7 +149,7 @@ def main():
                 print("\n")
 
                 # Generate a query for GPT-based internet search using stock symbols
-                gpt_search_query = f"stocks etf to buy now {' '.join(stock_symbols)} 2023"
+                gpt_search_query = f"Market Watch etf buy strong {' '.join(stock_symbols)} 2023"
                 print("Searching the internet for the latest news on the specified stocks with the GPT Artificial Intelligence robot.....")
                 print("")
 
