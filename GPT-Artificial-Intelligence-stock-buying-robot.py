@@ -30,12 +30,12 @@ def analyze_sentiment(text):
     return result[0]['label']
 
 # Function to get stock symbols from a website
-def get_stock_symbols(url):
+def get_stock_symbols_marketwatch(url):
     response = requests.get(url)
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
-        symbol_elements = soup.select('.symbol-link')
-        symbols = [symbol.text for symbol in symbol_elements]
+        symbol_elements = soup.select('.element__symbol')
+        symbols = [symbol.text.strip() for symbol in symbol_elements]
         return symbols
     else:
         print(f"Failed to retrieve data. Status code: {response.status_code}")
@@ -123,12 +123,18 @@ def is_market_open():
 def main():
     while True:
         try:
-            # Get stock symbols from the website
-            url = 'https://www.nasdaq.com/market-activity/etf'
-            stock_symbols = get_stock_symbols(url)
+            # Check if the market is open during Eastern Time
+            if not is_market_open():
+                print("This stock trading robot only works during stock market hours. Waiting for the stock market to open for trading….")
+                time.sleep(60)
+                continue
+
+            # Get stock symbols from the MarketWatch website
+            url_marketwatch = 'https://www.marketwatch.com/tools/top-25-etfs'
+            stock_symbols = get_stock_symbols_marketwatch(url_marketwatch)
 
             if stock_symbols:
-                print("List of Valid Stock Symbols:")
+                print("List of Valid Stock Symbols from MarketWatch:")
                 print(', '.join(stock_symbols))
                 print("\n")
 
