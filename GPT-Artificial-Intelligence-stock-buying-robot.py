@@ -168,9 +168,9 @@ def main():
                 print(', '.join(stock_symbols))
                 print("\n")
 
-
                 # Generate a query for GPT-based internet search using stock symbols
-                gpt_search_query = f"finance news target price increase decrease for {' '.join(stock_symbols)} "
+                gpt_search_query = f"latest finance news {', '.join(stock_symbols)} target price analysis sentiment"
+
                 print("Searching the internet for the latest news on the specified stocks with the GPT Artificial Intelligence robot.....")
                 print("")
 
