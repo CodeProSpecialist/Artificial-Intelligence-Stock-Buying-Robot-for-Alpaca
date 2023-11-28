@@ -48,10 +48,12 @@ def get_stock_symbols_marketwatch(url):
         print(f"Failed to retrieve data. Status code: {response.status_code}")
         return None
 
-# Function to generate GPT-based internet searches
-def generate_internet_search(query):
+
+# Extracted function for generating GPT-based internet searches
+def generate_internet_search_with_symbols(query, stock_symbols):
+    full_query = f"{query} {' '.join(stock_symbols)} 2023"
     gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neo-1.3B')
-    search_result = gpt_search_generator(query, max_length=160, num_return_sequences=1, temperature=0.7)
+    search_result = gpt_search_generator(full_query, max_length=160, num_return_sequences=1, temperature=0.7)
     return search_result[0]['generated_text']
 
 # Function to get the price percentage change over the past two days
@@ -148,13 +150,27 @@ def main():
                 print(', '.join(stock_symbols))
                 print("\n")
 
+                # Modify the GPT search query
+                gpt_search_query_nasdaq = f"Nasdaq strong buy stocks 2023"
+                gpt_search_query_marketwatch = f"Market Watch strong buy stocks 2023"
+
+                # Modify the GPT search query for Nasdaq
+                gpt_search_query_nasdaq = "Nasdaq strong buy"
+                gpt_search_result_nasdaq = generate_internet_search_with_symbols(gpt_search_query_nasdaq, stock_symbols)
+                print(f"Results from Nasdaq search:\n{gpt_search_result_nasdaq}\n")
+
+                # Modify the GPT search query for Market Watch ETFs
+                gpt_search_query_marketwatch_etf = "MarketWatch strong buy ETFs"
+                gpt_search_result_marketwatch_etf = generate_internet_search_with_symbols(gpt_search_query_marketwatch_etf, stock_symbols)
+                print(f"Results from MarketWatch ETF search:\n{gpt_search_result_marketwatch_etf}\n")
+
                 # Generate a query for GPT-based internet search using stock symbols
                 gpt_search_query = f"Market Watch etf buy strong {' '.join(stock_symbols)} 2023"
                 print("Searching the internet for the latest news on the specified stocks with the GPT Artificial Intelligence robot.....")
                 print("")
 
                 # Get the generated search result
-                gpt_search_result = generate_internet_search(gpt_search_query)
+                gpt_search_result = generate_internet_search_with_symbols(gpt_search_query)
 
                 # Print the GPT-generated search result
                 print(f"Results from GPT internet search:\n{gpt_search_result}\n")
