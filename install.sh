@@ -7,7 +7,7 @@ sudo apt-get update
 sudo apt-get install -y python3 python3-pip
 
 # Install required Python packages
-sudo pip3 install torch alpaca-trade-api yfinance transformers
+sudo pip3 install torch alpaca-trade-api yfinance transformers requests beautifulsoup4 
 
 # Install required system packages
 sudo apt-get install -y libopenblas-dev
