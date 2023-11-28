@@ -1,6 +1,6 @@
 import yfinance as yf
 import os
-from transformers import pipeline
+from transformers import pipeline, BertTokenizer, BertForSequenceClassification
 from datetime import datetime, timedelta
 import re
 import alpaca_trade_api as tradeapi
@@ -17,6 +17,10 @@ APIBASEURL = os.getenv('APCA_API_BASE_URL')
 
 # Initialize the Alpaca API
 api = tradeapi.REST(APIKEYID, APISECRETKEY, APIBASEURL)
+
+# Initialize the FinBERT model and tokenizer
+finbert_tokenizer = BertTokenizer.from_pretrained('yiyanghkust/finbert-tone', truncation=True)
+finbert_model = BertForSequenceClassification.from_pretrained('yiyanghkust/finbert-tone')
 
 global budget_per_stock
 
@@ -52,9 +56,23 @@ def get_stock_symbols_marketwatch(url):
 # Extracted function for generating GPT-based internet searches
 def generate_internet_search_with_symbols(query, stock_symbols):
     full_query = f"{query} {' '.join(stock_symbols)} 2023"
+
+    # Sentiment analysis using FinBERT
+    sentiments = []
+    for symbol in stock_symbols:
+        stock_text = f"{query} {symbol} 2023"
+        inputs = finbert_tokenizer(stock_text, return_tensors="pt")
+        outputs = finbert_model(**inputs)
+        sentiment_label = "Positive" if outputs.logits.argmax() == 1 else "Negative"
+        sentiments.append(f"{symbol}: {sentiment_label}")
+
+    # Combine sentiment analysis results
+    sentiment_result = ', '.join(sentiments)
+
     gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neo-1.3B')
     search_result = gpt_search_generator(full_query, max_length=160, num_return_sequences=1, temperature=0.7)
-    return search_result[0]['generated_text']
+
+    return f"{sentiment_result}\n{search_result[0]['generated_text']}"
 
 # Function to get the price percentage change over the past two days
 def get_price_change_percentage(symbol):
