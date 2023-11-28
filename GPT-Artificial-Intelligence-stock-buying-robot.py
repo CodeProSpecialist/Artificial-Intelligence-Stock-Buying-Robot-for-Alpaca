@@ -95,8 +95,10 @@ def is_valid_stock_symbol(symbol):
         info = stock_info.info
         if info:
             return True
+            time.sleep(0.5)
         else:
             return False
+            time.sleep(0.5)
     except:
         return False
 
@@ -132,6 +134,11 @@ def is_market_open():
 def main():
     while True:
         try:
+            print("")
+            print("The Program is running.....")
+            print("")
+            print("Checking the List of Stock Symbols.....")
+            print("")
             # Read stock symbols from a local text file
             with open('list-of-stock-symbols-to-scan.txt', 'r') as file:
                 stock_symbols = [symbol.strip() for symbol in file.readlines()]
