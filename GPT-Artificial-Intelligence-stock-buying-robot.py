@@ -71,6 +71,7 @@ def generate_internet_search_with_symbols(query, stock_symbols):
 
     max_sentences = 5
     max_tokens_per_sentence = 15  # Assuming an average of 15 tokens per sentence
+
     # Assuming an average of 15 tokens per sentence
     average_tokens_per_sentence = 15
 
