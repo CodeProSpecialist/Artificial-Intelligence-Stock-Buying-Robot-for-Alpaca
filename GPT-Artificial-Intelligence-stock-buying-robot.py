@@ -28,8 +28,11 @@ def get_historical_data(symbol, start_date, end_date):
     return stock_data
 
 # Function to perform sentiment analysis using transformers library
+# Function to perform sentiment analysis using transformers library
 def analyze_sentiment(text):
-    sentiment_analyzer = pipeline('sentiment-analysis')
+    # Replace 'model_name' with the name of the sentiment analysis model you want to use
+    model_name = 'nlptown/bert-base-multilingual-uncased-sentiment'
+    sentiment_analyzer = pipeline('sentiment-analysis', model=model_name)
     result = sentiment_analyzer(text)
     return result[0]['label']
 
