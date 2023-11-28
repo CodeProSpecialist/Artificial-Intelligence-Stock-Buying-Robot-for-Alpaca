@@ -18,6 +18,10 @@ APIBASEURL = os.getenv('APCA_API_BASE_URL')
 # Initialize the Alpaca API
 api = tradeapi.REST(APIKEYID, APISECRETKEY, APIBASEURL)
 
+global budget_per_stock
+
+budget_per_stock = 275
+
 # Function to get historical price data using yfinance
 def get_historical_data(symbol, start_date, end_date):
     stock_data = yf.download(symbol, start=start_date, end=end_date)
@@ -99,10 +103,12 @@ def has_enough_cash(cash_required):
     cash_available = float(account_info.cash)
     return cash_available >= cash_required
 
+
 # Function to check if the stock price is within the budget
-def is_price_within_budget(symbol, budget):
+def is_price_within_budget(symbol, budget_per_stock):
     current_price = get_current_price(symbol)
-    return current_price <= budget
+    return current_price <= budget_per_stock
+
 
 # Function to get the current price of a stock symbol
 def get_current_price(symbol):
@@ -132,8 +138,6 @@ def main():
             # Get stock symbols from the MarketWatch website
             url_marketwatch = 'https://www.marketwatch.com/tools/top-25-etfs'
             stock_symbols = get_stock_symbols_marketwatch(url_marketwatch)
-
-            budget_per_stock = 275
 
             if stock_symbols:
                 print("List of Valid Stock Symbols from MarketWatch:")
