@@ -51,7 +51,7 @@ def get_stock_symbols_marketwatch(url):
 # Function to generate GPT-based internet searches
 def generate_internet_search(query):
     gpt_search_generator = pipeline('text-generation', model='EleutherAI/gpt-neo-1.3B')
-    search_result = gpt_search_generator(query, max_length=150, num_return_sequences=1, temperature=0.7)
+    search_result = gpt_search_generator(query, max_length=300, num_return_sequences=1, temperature=0.7)
     return search_result[0]['generated_text']
 
 # Function to get the price percentage change over the past two days
