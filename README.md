@@ -5,6 +5,13 @@ This is an Artificial Intelligence Stock buying robot for Alpaca that only purch
 
 You need at least 16GB of RAM memory to run this GPT AI Robot. Some of the RAM can be virtual memory. 
 
+( in a Python Anaconda environment )
+( first activate Anaconda )
+
+conda init
+
+conda activate
+
 run the robot with the command: 
 
 python3 GPT-Artificial-Intelligence-stock-buying-robot.py
