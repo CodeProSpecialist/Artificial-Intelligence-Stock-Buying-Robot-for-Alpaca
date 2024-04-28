@@ -13,7 +13,7 @@ conda init bash
 conda activate
 
 # Install required Python packages
-pip3 install torch alpaca-trade-api yfinance transformers requests beautifulsoup4 
+pip3 install pytz numpy scipy alpaca-trade-api yfinance scikit-learn torch torchvision transformers requests beautifulsoup4
 
 transformers-cli download nlptown/bert-base-multilingual-uncased-sentiment
 
